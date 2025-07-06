@@ -1,0 +1,36 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import HeatMap
+
+# 1. Load the dataset
+df = pd.read_csv('global_wildfires.csv')  # Replace with your dataset path
+
+# 2. Preprocessing
+df['date'] = pd.to_datetime(df['date'])
+df['Hour'] = df['date'].dt.hour
+df['Weekday'] = df['date'].dt.day_name()
+df['Month'] = df['date'].dt.month_name()
+
+# 3. Plot wildfire count by hour
+plt.figure(figsize=(10, 5))
+sns.countplot(x='Hour', data=df, palette='magma')
+plt.title('Wildfires by Hour of Day')
+plt.xlabel('Hour')
+plt.ylabel('Wildfire Count')
+plt.grid(True)
+plt.show()
+
+# 4. Plot wildfire count by fire size category
+df['Size_Category'] = pd.cut(df['fire_size'], bins=[0, 100, 1000, 5000, 10000, 50000],
+                             labels=['Small', 'Moderate', 'Large', 'Very Large', 'Extreme'])
+
+plt.figure(figsize=(12, 5))
+sns.countplot(x='Size_Category', data=df, palette='viridis')
+plt.title('Wildfires by Size Category')
+plt.ylabel('Count')
+plt.grid(True)
+plt.show()
+
+# 5
